@@ -53,6 +53,10 @@ class WorkspaceReader:
 
             result = roofunction.getVal(argset)
 
+            result = round(result, 5)  # round to 5 digits
+
+            print ("\n the following function: {} have a scale factor in the following bin: pt = {}, eta = {} is returned a corr factor = {}".format(name, pt, eta, result))
+
             return result
 
         except ReferenceError:

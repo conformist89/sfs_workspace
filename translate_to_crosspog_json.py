@@ -9,8 +9,8 @@ ROOT.PyConfig.IgnoreCommandLineOptions = True
 ROOT.gROOT.SetBatch()
 ROOT.TH1.AddDirectory(0)
 
-from create_crosspog_json import pt_eta_correction, CorrectionSet, emb_doublemuon_correction
-
+# from create_crosspog_json import pt_eta_correction, CorrectionSet, emb_doublemuon_correction
+from create_crosspog_json import pt_eta_correction, CorrectionSet 
 
 def parse_args():
     parser = argparse.ArgumentParser()
@@ -59,28 +59,28 @@ def main(args):
     # Create the container to hold all corrections
     correctionset = CorrectionSet(f"Embedding{args.era}")
     add_corrections(f"settings/UL/settings_{args.channel}_{args.era}.yaml", correctionset, args.era, outdir)
-    if args.channel == "muon":
-        EmbSelEff = emb_doublemuon_correction(
-            tag="EmbSelEff",
-            name="m_sel_trg_kit_ratio",
-            configfile=f"settings/UL/settings_embeddingselection_{args.era}_xpog.yaml",
-            triggernames=["Trg17_pt_eta_bins", "Trg8_pt_eta_bins"],
-            era=args.era,
-            outdir=f"{outdir}/jsons",
-            data_only=True,
-        )
-        EmbSelEff.generate_scheme()
-        EmbSelEffID = pt_eta_correction(
-                    tag="EmbSelEffID",
-                    name="EmbID_pt_eta_bins",
-                    configfile=f"settings/UL/settings_embeddingselection_{args.era}.yaml",
-                    era=args.era,
-                    outdir=f"{outdir}/jsons",
-                    data_only=True,
-                )
-        EmbSelEffID.generate_scheme()
-        correctionset.add_correction(EmbSelEff)
-        correctionset.add_correction(EmbSelEffID)
+    # if args.channel == "muon":
+    #     EmbSelEff = emb_doublemuon_correction(
+    #         tag="EmbSelEff",
+    #         name="m_sel_trg_kit_ratio",
+    #         configfile=f"settings/UL/settings_embeddingselection_{args.era}_xpog.yaml",
+    #         triggernames=["Trg17_pt_eta_bins", "Trg8_pt_eta_bins"],
+    #         era=args.era,
+    #         outdir=f"{outdir}/jsons",
+    #         data_only=True,
+    #     )
+    #     EmbSelEff.generate_scheme()
+        # EmbSelEffID = pt_eta_correction(
+        #             tag="EmbSelEffID",
+        #             name="EmbID_pt_eta_bins",
+        #             configfile=f"settings/UL/settings_embeddingselection_{args.era}.yaml",
+        #             era=args.era,
+        #             outdir=f"{outdir}/jsons",
+        #             data_only=True,
+        #         )
+        # EmbSelEffID.generate_scheme()
+        # correctionset.add_correction(EmbSelEff)
+        # correctionset.add_correction(EmbSelEffID)
     correctionset.write_json(f"{outdir}/jsons/{args.channel}_{args.era}.json")
     return
 
