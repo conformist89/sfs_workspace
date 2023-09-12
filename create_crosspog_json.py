@@ -362,14 +362,6 @@ class emb_doublemuon_correction(Correction):
                                             "input": "abs(eta_2)",
                                             "edges": self.etabinning,
                                             "flow": "clamp",
-                                            # "content": self.get_sf(
-                                            #     pt_1,
-                                            #     eta_1,
-                                            #     pt_2,
-                                            #     self.etabinning,
-                                            #     self.data_only,
-                                            # ),
-
                                             "content" : self.workspace.get_emb_sel_sfs( pt_1, eta_1, pt_2, self.etabinning)
                                             
                                         }
@@ -387,64 +379,6 @@ class emb_doublemuon_correction(Correction):
             raise Exception("Not implemented")
         
         return sfs
-
-
-    # def get_sf(self, pt_1, eta_1, pt_2, eta_binning, data_only, inputtype=None):
-    #     sfs = []
-    #     # leave of the last eta bin, which is the overflow bin
-    #     for eta_2 in eta_binning[:-1]:
-    #         efficiency = {}
-    #         for lepton in [1, 2]:
-    #             for trigger in self.names:
-    #                 shortname = "17" if "17" in trigger else "8"
-    #                 if lepton == 1:
-    #                     pt_ = pt_1
-    #                     eta_ = eta_1
-    #                 else:
-    #                     pt_ = pt_2
-    #                     eta_ = eta_2
-    #                 # efficiency["{}_{}".format(shortname, lepton)] = self.inputobjects[
-    #                 #     trigger
-    #                 # ]["object"].GetBinContent(
-    #                 #     self.inputobjects[trigger]["object"].GetXaxis().FindBin(pt_),
-    #                 #     self.inputobjects[trigger]["object"].GetYaxis().FindBin(eta_),
-    #                 # )
-
-    #                 if trigger == "Trg17_pt_eta_bins":
-
-    #                     efficiency["{}_{}".format(shortname, lepton)] = 0.95
-    #                 elif trigger == "Trg8_pt_eta_bins":
-    #                     efficiency["{}_{}".format(shortname, lepton)] = 0.88
-
-    #         sf = 1.0 / (
-    #             efficiency["8_1"] * efficiency["17_2"]
-    #             + efficiency["8_2"] * efficiency["17_1"]
-    #             - efficiency["17_1"] * efficiency["17_2"]
-    #         )
-    #         # sanitize if all efficiencies are close to zero
-    #         if (
-    #             abs(
-    #                 efficiency["8_1"] * efficiency["17_2"]
-    #                 + efficiency["8_2"] * efficiency["17_1"]
-    #                 - efficiency["17_1"] * efficiency["17_2"]
-    #             )
-    #             < epsilon
-    #         ):
-    #             print(
-    #                 "Sanitizing SF for pt_1 = {}, eta_1 = {}, pt_2 = {}, eta_2 = {}".format(
-    #                     pt_1, eta_1, pt_2, eta_2
-    #                 )
-    #             )
-    #             print("calefactor before: {}".format(sf))
-    #             print("Scalefactor after: ", 1.0)
-    #             sf = 0.0
-    #         sfs.append(sf)
-    #         # if self.verbose:
-    #     # print("\n pt_1:", pt_1, "eta_1:", eta_1, "pt_2:", pt_2, "eta_2:", eta_2)
-    #     # print("sf:", sf)
-
-    #     # print("\n sfs: ", sfs)
-    #     return sfs
 
     def generate_scheme(self):
         self.parse_config()
