@@ -7,8 +7,8 @@ Before the execution, one should activate CROWN's tau environment, e.g
 source /work/${USER}/CROWN/init.sh tau
 ```
 
-Execution: 
+Execution:
 
 ```
-python3 translate_to_crosspog_json.py -e 2016postVFPUL -c muon -o output
+python3 translate_to_crosspog_json.py -e 2016postVFPUL -c muon -o output # -w path_to_workspace_file.root
 ```

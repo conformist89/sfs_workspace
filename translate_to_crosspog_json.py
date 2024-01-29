@@ -5,30 +5,22 @@ import yaml
 import argparse
 
 import ROOT
+
 ROOT.PyConfig.IgnoreCommandLineOptions = True
 ROOT.gROOT.SetBatch()
 ROOT.TH1.AddDirectory(0)
 
 from create_crosspog_json import pt_eta_correction, CorrectionSet, emb_doublemuon_correction
-# from create_crosspog_json import pt_eta_correction, CorrectionSet 
+
+# from create_crosspog_json import pt_eta_correction, CorrectionSet
+
 
 def parse_args():
     parser = argparse.ArgumentParser()
-    parser.add_argument(
-        "-e", "--era",
-        type=str,
-        help="Era to be considered"
-    )
-    parser.add_argument(
-        "-c", "--channel",
-        type=str,
-        help="Considered channel to be written out"
-    )
-    parser.add_argument(
-        "-o", "--output",
-        type=str,
-        help="Folder where the outputs will be written and inputs read from"
-    )
+    parser.add_argument("-w", "--workspace-file", type=str, help="path to workspace file if not located in .", default=None, required=False)
+    parser.add_argument("-e", "--era", type=str, help="Era to be considered")
+    parser.add_argument("-c", "--channel", type=str, help="Considered channel to be written out")
+    parser.add_argument("-o", "--output", type=str, help="Folder where the outputs will be written and inputs read from")
     return parser.parse_args()
 
 
@@ -69,16 +61,16 @@ def main(args):
             outdir=f"{outdir}/jsons",
             data_only=True,
         )
-        EmbSelEff.generate_scheme()
+        EmbSelEff.generate_scheme(workspace_file=args.workspace_file)
         EmbSelEffID = pt_eta_correction(
-                    tag="EmbSelEffID",
-                    name="EmbID_pt_eta_bins",
-                    configfile=f"settings/UL/settings_embeddingselection_{args.era}.yaml",
-                    era=args.era,
-                    outdir=f"{outdir}/jsons",
-                    data_only=True,
-                )
-        EmbSelEffID.generate_scheme()
+            tag="EmbSelEffID",
+            name="EmbID_pt_eta_bins",
+            configfile=f"settings/UL/settings_embeddingselection_{args.era}.yaml",
+            era=args.era,
+            outdir=f"{outdir}/jsons",
+            data_only=True,
+        )
+        EmbSelEffID.generate_scheme(workspace_file=args.workspace_file)
         correctionset.add_correction(EmbSelEff)
         correctionset.add_correction(EmbSelEffID)
     correctionset.write_json(f"{outdir}/jsons/{args.channel}_{args.era}.json")
