@@ -17,7 +17,7 @@ from create_crosspog_json import pt_eta_correction, CorrectionSet, emb_doublemuo
 
 def parse_args():
     parser = argparse.ArgumentParser()
-    parser.add_argument("-w", "--workspace-file", type=str, help="path to workspace file if not located in .")
+    parser.add_argument("-w", "--workspace-file", type=str, help="path to workspace file if not located in .", default=None, required=False)
     parser.add_argument("-e", "--era", type=str, help="Era to be considered")
     parser.add_argument("-c", "--channel", type=str, help="Considered channel to be written out")
     parser.add_argument("-o", "--output", type=str, help="Folder where the outputs will be written and inputs read from")
